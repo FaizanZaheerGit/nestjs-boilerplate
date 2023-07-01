@@ -34,7 +34,7 @@ export class AuthService {
     async login(loginDto: LoginDto, req) {
         try {
             loginDto[EMAIL_ADDRESS] = loginDto[EMAIL_ADDRESS].trim().toLowerCase();
-            const existing_user = await this.usersService.readOne({ email_address: loginDto[EMAIL_ADDRESS] });
+            const existing_user = await this.usersService.readOne({ email_address: loginDto[EMAIL_ADDRESS] }, req, {password: 0, password_salt: 0});
             if (existing_user[MESSAGE] != responses.MESSAGE_SUCCESS) {
                 return responses.get_response_object(responses.CODE_NOT_FOUND, {}, responses.MESSAGE_NOT_FOUND([USER, EMAIL_ADDRESS]))
             }

@@ -66,9 +66,9 @@ export class UsersService {
         }
     }
 
-    async readOne(read_filter: FilterQuery<User> ={}, req =null): Promise<object> {
+    async readOne(read_filter: FilterQuery<User> ={}, req =null, projection_filter: object ={}): Promise<object> {
         try {
-            const user = await this.userModel.findOne(read_filter)
+            const user = await this.userModel.findOne(read_filter, {}, {projection: projection_filter})
             .populate({path: 'created_by', select: 'name email_address phone_number display_picture', options: {strictPopulate: false}})
             .populate({path: 'updated_by', select: 'name email_address phone_number display_picture', options: {strictPopulate: false}});
             if (!user) return responses.get_response_object(responses.CODE_NOT_FOUND, {}, responses.MESSAGE_NOT_FOUND([USER, `${Object.keys(read_filter)[0]}`]));
